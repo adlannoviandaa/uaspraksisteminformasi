@@ -12,12 +12,13 @@ class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
-    protected $fillable = [
-        'name',
-        'identifier', // Kolom unik untuk login
-        'role',
-        'password',
-    ];
+ protected $fillable = [
+    'name',
+    'password',
+    'nim',
+    'role',
+];
+
 
     // ... (protected $hidden dan $casts lainnya)
 

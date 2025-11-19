@@ -10,7 +10,7 @@ return new class extends Migration
     {
         Schema::create('users', function (Blueprint $table) {
             $table->id();
-            $table->string('identifier')->unique(); // NIM / NIP / ID
+            $table->string('nim')->unique(); // NIM / NIP / ID
             $table->string('name');
             $table->enum('role', ['admin', 'dosen', 'mahasiswa']);
             $table->string('password');
@@ -31,7 +31,7 @@ return new class extends Migration
             $table->longText('payload');
             $table->integer('last_activity')->index();
         });
-        
+
         });
     }
 

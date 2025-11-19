@@ -30,6 +30,6 @@ class Kernel extends HttpKernel
         //  MIDDLEWARE KUSTOM SITAMA
         // ======================================
         // Alias 'role' digunakan untuk membatasi akses berdasarkan peran pengguna
-        'role' => \App\Http\Middleware\RoleMiddleware::class,
+        'role' => \App\Http\Middleware\CheckRole::class,
     ];
 }

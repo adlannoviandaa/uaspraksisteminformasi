@@ -1,0 +1,111 @@
+/* ===== IMPORT FONT ===== */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700;800&display=swap');
+
+/* ===== RESET ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Montserrat', sans-serif;
+}
+
+/* ===== BODY ===== */
+body {
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(to bottom, #3EB489, #40E0D0, #FFFFFF);
+}
+
+/* ===== CONTAINER ===== */
+.container-all {
+    text-align: center;
+}
+
+/* ===== TITLE APP ===== */
+.title-app h1 {
+    font-weight: 800; /* ExtraBold */
+    font-size: 78px;
+    color: #ffffff;
+    text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2); /* Shadow */
+    margin-bottom: 1rem;
+}
+
+.title-app p {
+    font-weight: 700; /* Bold */
+    font-size: 16px;
+    color: #ffffff;
+     text-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    margin-bottom: 2rem;
+}
+
+/* ===== LOGIN BOX ===== */
+.login-box {
+    width: 400px;
+    padding: 2rem;
+    background-color: rgba(255, 255, 255, 0.95);
+    border-radius: 15px;
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+    text-align: center;
+}
+
+.login-box h3 {
+    font-size: 28px;
+    font-weight: 700;
+    color: #000; /* Tulisan LOGIN hitam */
+    margin-bottom: 1.5rem;
+}
+
+/* INPUT FIELD */
+.login-box input[type="text"],
+.login-box input[type="password"] {
+    width: 100%;
+    padding: 0.75rem 1rem;
+    margin-bottom: 1rem;
+    border-radius: 10px;
+    border: 1px solid #ccc;
+    font-size: 1rem;
+    transition: border 0.3s, box-shadow 0.3s;
+}
+
+.login-box input[type="text"]:focus,
+.login-box input[type="password"]:focus {
+    border-color: #3EB489;
+    box-shadow: 0 0 10px rgba(62, 180, 137, 0.3);
+    outline: none;
+}
+
+/* Tombol Masuk sudah ada sebelumnya */
+.login-box button {
+    width: 100%;
+    padding: 0.75rem;
+    border: none;
+    border-radius: 10px;
+    background-color: #3EB489;
+    color: #fff;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-bottom: 14px; /* Tambahkan jarak ke bawah */
+}
+
+.login-box button:hover {
+    background-color: #3EB489;
+    transform: translateY(-2px);
+}
+
+/* Link Lupa Password */
+.login-box a {
+    display: inline-block;
+    font-size: 0.9rem;
+    color: #3EB489;
+    text-decoration: none;
+    transition: color 0.3s;
+    margin-top: 6px; /* Bisa atur jarak tambahan jika perlu */
+}
+
+.login-box a:hover {
+    color: #40E0D0;
+}
