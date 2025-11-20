@@ -2,26 +2,25 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
 class TugasAkhir extends Model
 {
-    use HasFactory;
-
     protected $fillable = [
-        // ... (fillable lainnya)
+        'mahasiswa_id',
+        'judul_ta',
         'status',
-        'catatan_dosen',
+        'pembimbing1_id',
+        'pembimbing2_id',
     ];
 
-    // ... (Relasi mahasiswa() dan dosenPembimbing1() sebelumnya)
-
-    /**
-     * Relasi: Tugas Akhir memiliki banyak log Bimbingan.
-     */
-    public function bimbingans()
+    public function dosenPembimbing1()
     {
-        return $this->hasMany(Bimbingan::class, 'tugas_akhir_id');
+        return $this->belongsTo(User::class, 'pembimbing1_id');
+    }
+
+    public function dosenPembimbing2()
+    {
+        return $this->belongsTo(User::class, 'pembimbing2_id');
     }
 }
