@@ -8,127 +8,143 @@ use App\Http\Controllers\DosenController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
 
-// ===============================
+// =======================================
 // AUTH
-// ===============================
-Route::get('/', fn() => redirect()->route('login'));
+// =======================================
+Route::get('/', function () {
+    return redirect()->route('login');
+});
 
 Route::get('/login', [AuthLoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [AuthLoginController::class, 'login'])->name('login.process');
 Route::post('/logout', [AuthLoginController::class, 'logout'])->name('logout');
 
 // Forgot Password
-Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])->name('password.request');
+Route::get('/forgot-password', [ForgotPasswordController::class, 'showLinkRequestForm'])
+    ->name('password.request');
 
-// ===============================
-// AREA LOGIN DIBUTUHKAN
-// ===============================
+// =======================================
+// ROUTES YANG BUTUH LOGIN
+// =======================================
 Route::middleware(['auth'])->group(function () {
 
     // ===========================
-    // ADMIN
+    // ADMIN AREA
     // ===========================
     Route::middleware(['role:admin'])
         ->prefix('admin')
         ->name('admin.')
         ->group(function () {
 
-        Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
+            Route::get('/dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
 
-        // Users
-        Route::resource('users', AdminController::class)->except(['show']);
+            Route::resource('users', AdminController::class)->except(['show']);
 
-        // Laporan
-        Route::get('/laporan/ta', [AdminController::class, 'laporanTugasAkhir'])->name('laporan.ta');
-        Route::get('/laporan/mahasiswa/{mahasiswa}', [AdminController::class, 'laporanMahasiswa'])->name('laporan.mahasiswa');
+            Route::get('/laporan/ta', [AdminController::class, 'laporanTugasAkhir'])->name('laporan.ta');
+            Route::get('/laporan/mahasiswa/{mahasiswa}', [AdminController::class, 'laporanMahasiswa'])
+                ->name('laporan.mahasiswa');
 
-        // Settings
-        Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
-        Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
-    });
+            Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
+            Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
+        });
 
     // ===========================
-    // DOSEN
+    // DOSEN AREA
     // ===========================
     Route::middleware(['role:dosen'])
         ->prefix('dosen')
         ->name('dosen.')
         ->group(function () {
 
-        Route::get('/dashboard', [DosenController::class, 'dashboard'])->name('dashboard');
+            Route::get('/dashboard', [DosenController::class, 'dashboard'])->name('dashboard');
 
-        // Pengajuan Judul
-        Route::get('/judul/persetujuan', [DosenController::class, 'listPersetujuan'])->name('judul.persetujuan');
-        Route::post('/judul/{tugasAkhir}/approve', [DosenController::class, 'approveJudul'])->name('judul.approve');
-        Route::post('/judul/{tugasAkhir}/reject', [DosenController::class, 'rejectJudul'])->name('judul.reject');
+            Route::get('/judul/persetujuan', [DosenController::class, 'listPersetujuan'])
+                ->name('judul.persetujuan');
+            Route::post('/judul/{tugasAkhir}/approve', [DosenController::class, 'approveJudul'])
+                ->name('judul.approve');
+            Route::post('/judul/{tugasAkhir}/reject', [DosenController::class, 'rejectJudul'])
+                ->name('judul.reject');
 
-        // Bimbingan
-        Route::get('/log-bimbingan', [DosenController::class, 'listBimbingan'])->name('bimbingan.log');
-        Route::post('/log-bimbingan/{bimbingan}/proses', [DosenController::class, 'prosesBimbingan'])->name('bimbingan.proses');
+            Route::get('/log-bimbingan', [DosenController::class, 'listBimbingan'])
+                ->name('bimbingan.log');
+            Route::post('/log-bimbingan/{bimbingan}/proses', [DosenController::class, 'prosesBimbingan'])
+                ->name('bimbingan.proses');
 
-        // Grading
-        Route::get('/ta/{tugasAkhir}/grading', [DosenController::class, 'showGradingForm'])->name('grading.form');
-        Route::post('/ta/{tugasAkhir}/grading', [DosenController::class, 'submitGrading'])->name('grading.submit');
+            Route::get('/ta/{tugasAkhir}/grading', [DosenController::class, 'showGradingForm'])
+                ->name('grading.form');
+            Route::post('/ta/{tugasAkhir}/grading', [DosenController::class, 'submitGrading'])
+                ->name('grading.submit');
 
-        // Mahasiswa bimbingan
-        Route::get('/mahasiswa-bimbingan', [DosenController::class, 'mahasiswaBimbingan'])->name('mahasiswa.bimbingan');
-        Route::get('/bimbingan/mahasiswa/{mahasiswa}', [DosenController::class, 'detailBimbingan'])->name('bimbingan.detail');
-        Route::get('/mahasiswa-bimbingan/{mahasiswa}', [DosenController::class, 'profileMahasiswa'])->name('mahasiswa.profile');
-    });
+            Route::get('/mahasiswa-bimbingan', [DosenController::class, 'mahasiswaBimbingan'])
+                ->name('mahasiswa.bimbingan');
+            Route::get('/bimbingan/mahasiswa/{mahasiswa}', [DosenController::class, 'detailBimbingan'])
+                ->name('bimbingan.detail');
+            Route::get('/mahasiswa-bimbingan/{mahasiswa}', [DosenController::class, 'profileMahasiswa'])
+                ->name('mahasiswa.profile');
+        });
 
     // ===========================
-    // MAHASISWA
+    // MAHASISWA AREA
     // ===========================
     Route::middleware(['role:mahasiswa'])
         ->prefix('mahasiswa')
         ->name('mahasiswa.')
         ->group(function () {
 
-        // Dashboard
-        Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('dashboard');
+            Route::get('/dashboard', [MahasiswaController::class, 'dashboard'])->name('dashboard');
 
-        // Pengajuan Judul / Tugas Akhir
-        Route::get('/judul/ajukan', [MahasiswaController::class, 'showFormPengajuan'])->name('judul.form');
-        Route::post('/judul/ajukan', [MahasiswaController::class, 'submitPengajuan'])->name('judul.submit');
+            Route::get('/judul/ajukan', [MahasiswaController::class, 'showFormPengajuan'])
+                ->name('judul.form');
+            Route::post('/judul/ajukan', [MahasiswaController::class, 'submitPengajuan'])
+                ->name('judul.submit');
 
-        // Bimbingan
-        Route::get('/bimbingan/riwayat', [MahasiswaController::class, 'riwayatBimbingan'])->name('bimbingan.riwayat');
-        Route::post('/bimbingan/submit', [MahasiswaController::class, 'submitBimbingan'])->name('bimbingan.submit');
+            Route::get('/bimbingan/riwayat', [MahasiswaController::class, 'riwayatBimbingan'])
+                ->name('bimbingan.riwayat');
+            Route::post('/bimbingan/submit', [MahasiswaController::class, 'submitBimbingan'])
+                ->name('bimbingan.submit');
 
-        // Laporan TA
-        Route::get('/ta/laporan', [MahasiswaController::class, 'laporanTA'])->name('ta.laporan');
-    });
+            Route::get('/ta/laporan', [MahasiswaController::class, 'laporanTA'])
+                ->name('ta.laporan');
+        });
 
     // ===========================
-    // PROFIL
+    // PROFIL USER
     // ===========================
-    Route::prefix('profile')->name('profile.')->group(function () {
-        Route::get('/', [AuthLoginController::class, 'showProfile'])->name('show');
-        Route::post('/update', [AuthLoginController::class, 'updateProfile'])->name('update');
-        Route::get('/settings', [AuthLoginController::class, 'settings'])->name('settings');
-        Route::post('/settings', [AuthLoginController::class, 'updateSettings'])->name('settings.update');
-    });
+    Route::prefix('profile')
+        ->name('profile.')
+        ->group(function () {
+            Route::get('/', [AuthLoginController::class, 'showProfile'])->name('show');
+            Route::post('/update', [AuthLoginController::class, 'updateProfile'])->name('update');
+            Route::get('/settings', [AuthLoginController::class, 'settings'])->name('settings');
+            Route::post('/settings', [AuthLoginController::class, 'updateSettings'])->name('settings.update');
+        });
 
     // ===========================
     // PESAN
     // ===========================
-    Route::prefix('pesan')->name('messages.')->group(function () {
-        Route::get('/', [MessageController::class, 'index'])->name('index');
-        Route::get('/kirim', [MessageController::class, 'create'])->name('create');
-        Route::post('/', [MessageController::class, 'store'])->name('store');
-        Route::get('/{conversation}', [MessageController::class, 'show'])->name('show');
-        Route::post('/{conversation}/reply', [MessageController::class, 'reply'])->name('reply');
-    });
+    Route::prefix('pesan')
+        ->name('messages.')
+        ->group(function () {
+            Route::get('/', [MessageController::class, 'index'])->name('index');
+            Route::get('/kirim', [MessageController::class, 'create'])->name('create');
+            Route::post('/', [MessageController::class, 'store'])->name('store');
+            Route::get('/{conversation}', [MessageController::class, 'show'])->name('show');
+            Route::post('/{conversation}/reply', [MessageController::class, 'reply'])->name('reply');
+        });
 
-    // Notifikasi
-    Route::prefix('notifikasi')->name('notifications.')->group(function () {
-        Route::get('/', [MessageController::class, 'notifications'])->name('index');
-        Route::post('/mark-read/{id}', [MessageController::class, 'markAsRead'])->name('mark.read');
-    });
+    // ===========================
+    // NOTIFIKASI
+    // ===========================
+    Route::prefix('notifikasi')
+        ->name('notifications.')
+        ->group(function () {
+            Route::get('/', [MessageController::class, 'notifications'])->name('index');
+            Route::post('/mark-read/{id}', [MessageController::class, 'markAsRead'])->name('mark.read');
+        });
 });
 
-// ===============================
-// HALAMAN UMUM
-// ===============================
+// =======================================
+// PUBLIC PAGES
+// =======================================
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');

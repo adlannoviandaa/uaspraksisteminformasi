@@ -31,5 +31,7 @@ class Kernel extends HttpKernel
         // ======================================
         // Alias 'role' digunakan untuk membatasi akses berdasarkan peran pengguna
         'role' => \App\Http\Middleware\CheckRole::class,
+        'role' => \App\Http\Middleware\RoleMiddleware::class,
+
     ];
 }
