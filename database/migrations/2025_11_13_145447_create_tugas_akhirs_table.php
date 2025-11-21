@@ -1,4 +1,5 @@
 <?php
+
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -9,13 +10,27 @@ return new class extends Migration
     {
         Schema::create('tugas_akhirs', function (Blueprint $table) {
             $table->id();
-            // Kunci asing ke tabel users (mahasiswa yang mengajukan)
-            $table->foreignId('mahasiswa_id')->constrained('users')->onDelete('cascade');
+
+            // Relasi ke tabel users (mahasiswa pengaju)
+            $table->foreignId('mahasiswa_id')
+                  ->constrained('users')
+                  ->onDelete('cascade');
+
+            // Data tugas akhir
             $table->string('judul_ta');
             $table->text('deskripsi')->nullable();
             $table->string('bidang_minat')->nullable();
-            $table->enum('status', ['Diajukan', 'Ditolak', 'Diterima']);
-            $table->foreignId('dosen_pembimbing1_id')->nullable()->constrained('users')->onDelete('set null');
+
+            // Status pengajuan
+            $table->enum('status', ['Diajukan', 'Ditolak', 'Diterima'])
+                  ->default('Diajukan');
+
+            // Dosen pembimbing (opsional)
+            $table->foreignId('dosen_pembimbing1_id')
+                  ->nullable()
+                  ->constrained('users')
+                  ->onDelete('set null');
+
             $table->timestamps();
         });
     }

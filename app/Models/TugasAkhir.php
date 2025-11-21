@@ -9,18 +9,34 @@ class TugasAkhir extends Model
     protected $fillable = [
         'mahasiswa_id',
         'judul_ta',
+        'deskripsi',
+        'bidang_minat',
         'status',
-        'pembimbing1_id',
-        'pembimbing2_id',
+        'dosen_pembimbing1_id',
+        'dosen_pembimbing2_id',
     ];
 
-    public function dosenPembimbing1()
+    /**
+     * Relasi ke mahasiswa (tabel users)
+     */
+    public function mahasiswa()
     {
-        return $this->belongsTo(User::class, 'pembimbing1_id');
+        return $this->belongsTo(User::class, 'mahasiswa_id');
     }
 
+    /**
+     * Relasi ke dosen pembimbing 1
+     */
+    public function dosenPembimbing1()
+    {
+        return $this->belongsTo(User::class, 'dosen_pembimbing1_id');
+    }
+
+    /**
+     * Relasi ke dosen pembimbing 2 (opsional)
+     */
     public function dosenPembimbing2()
     {
-        return $this->belongsTo(User::class, 'pembimbing2_id');
+        return $this->belongsTo(User::class, 'dosen_pembimbing2_id');
     }
 }

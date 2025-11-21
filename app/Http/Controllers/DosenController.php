@@ -5,82 +5,40 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\TugasAkhir;
-use App\Models\User;
 
 class DosenController extends Controller
 {
-    /**
-     * Menampilkan dashboard utama untuk Dosen.
-     */
     public function dashboard()
     {
-        // Hitung jumlah mahasiswa bimbingan yang masih aktif (status Diterima)
-        $jumlahBimbinganAktif = TugasAkhir::where('dosen_pembimbing1_id', Auth::id())
-                                         ->where('status', 'Diterima')
-                                         ->count();
+        // ID dosen yang sedang login
+        $dosenId = Auth::id();
 
-        // Hitung judul yang masih menunggu persetujuan secara umum (untuk ditampilkan di notifikasi)
-        $judulMenunggu = TugasAkhir::where('status', 'Diajukan')
-                                     ->count();
+        // Ambil semua TA yang dibimbing oleh dosen ini
+        $dataTA = TugasAkhir::where('dosen_pembimbing1_id', $dosenId)->get();
 
-        return view('dosen.dashboard', compact('jumlahBimbinganAktif', 'judulMenunggu'));
-    }
+        // Hitungan ringkasan data
+        $totalTA = $dataTA->count();
 
-    /**
-     * Menampilkan daftar semua judul TA yang perlu ditinjau (status 'Diajukan').
-     */
-    public function showJudulReview()
-    {
-        $judulReview = TugasAkhir::where('status', 'Diajukan')
-                                 ->with('mahasiswa') // Ambil data mahasiswa yang mengajukan
-                                 ->get();
+        // Semua TA yang statusnya masih diajukan (untuk notifikasi)
+        $pengajuanBaru = TugasAkhir::where('status', 'Diajukan')->count();
 
-        return view('dosen.judul_review', compact('judulReview'));
-    }
+        // Jumlah mahasiswa bimbingan aktif (status diterima)
+        $totalBimbingan = TugasAkhir::where('dosen_pembimbing1_id', $dosenId)
+                                    ->where('status', 'Diterima')
+                                    ->count();
 
-    /**
-     * Memproses persetujuan atau penolakan judul TA.
-     */
-    public function prosesJudul(Request $request, TugasAkhir $tugasAkhir)
-    {
-        $request->validate([
-            'action' => 'required|in:terima,tolak',
-            'catatan' => 'nullable|string',
-        ]);
-
-        if ($request->action === 'terima') {
-            // Set status Diterima dan tetapkan diri sendiri (dosen yang login) sebagai Pembimbing 1
-            $tugasAkhir->update([
-                'status' => 'Diterima',
-                'dosen_pembimbing1_id' => Auth::id(),
-                'catatan_dosen' => $request->catatan,
-            ]);
-            $message = 'Judul berhasil DITERIMA dan Anda ditetapkan sebagai Pembimbing 1.';
-
-        } else { // Tolak
-            $tugasAkhir->update([
-                'status' => 'Ditolak',
-                'dosen_pembimbing1_id' => null, // Hapus penetapan pembimbing jika ditolak
-                'catatan_dosen' => $request->catatan,
-            ]);
-            $message = 'Judul berhasil DITOLAK.';
-        }
-
-        return redirect()->route('dosen.review.index')->with('success', $message);
-    }
-
-    /**
-     * Menampilkan daftar mahasiswa yang dibimbing oleh dosen yang sedang login.
-     */
-    public function listMahasiswaBimbingan()
-    {
-        // Mengambil semua Tugas Akhir di mana dosen yang sedang login adalah Pembimbing 1
-        // Status: hanya yang Diterima (sudah menjadi bimbingan aktif)
-        $mahasiswaBimbingan = TugasAkhir::where('dosen_pembimbing1_id', Auth::id())
+        // Daftar mahasiswa bimbingan (boleh kosong)
+        $mahasiswaBimbingan = TugasAkhir::where('dosen_pembimbing1_id', $dosenId)
                                         ->where('status', 'Diterima')
-                                        ->with('mahasiswa') // Ambil data User Mahasiswa
+                                        ->with('mahasiswa') // relasi jika ada
                                         ->get();
 
-        return view('dosen.mahasiswa_bimbingan', compact('mahasiswaBimbingan'));
+        return view('dosen.dashboard', [
+            'dataTA' => $dataTA,
+            'totalTA' => $totalTA,
+            'pengajuanBaru' => $pengajuanBaru,
+            'totalBimbingan' => $totalBimbingan,
+            'mahasiswaBimbingan' => $mahasiswaBimbingan ?? collect(),
+        ]);
     }
 }

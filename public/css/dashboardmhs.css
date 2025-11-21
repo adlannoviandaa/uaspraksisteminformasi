@@ -1,18 +1,18 @@
-/* Import Font Poppins */
-/* Catatan: Import ini harus dilakukan di HTML, bukan di file CSS jika Anda menggunakan link tag */
-/* @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap'); */
+/* Import Font */
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600;700&display=swap');
 
 /* Variabel Warna */
 :root {
-    --sidebar-color: #25805E; /* WARNA BARU: Hijau Tua */
-    --accent-color: #388E3C; /* Hijau yang serasi untuk Penekanan/Proses */
-    --bg-color: #f0f4f7; /* Latar Belakang Abu-abu Muda */
+    --sidebar-color: #25805E;
+    --sidebar-hover: #1a6449;
+    --accent-color: #2E7D32;
+    --bg-color: #f0f4f7;
     --card-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
-/* Gaya Dasar */
+/* BASE */
 body {
-    font-family: 'Poppins', sans-serif;
+    font-family: 'Montserrat', sans-serif;
     margin: 0;
     padding: 0;
     background-color: var(--bg-color);
@@ -20,30 +20,29 @@ body {
     min-height: 100vh;
 }
 
+/* LAYOUT */
 .layout {
     display: flex;
     width: 100%;
 }
 
-/* Sidebar Navigasi */
+/* SIDEBAR */
 .sidebar {
     width: 250px;
-    /* MENGGUNAKAN WARNA BARU */
     background-color: var(--sidebar-color);
     color: white;
     padding-top: 20px;
-    box-shadow: 2px 0 10px rgba(0, 0, 0, 0.2);
     position: sticky;
     top: 0;
     height: 100vh;
+    box-shadow: 2px 0 10px rgba(0,0,0,0.2);
 }
 
 .sidebar-title {
     font-size: 1.6em;
-    font-weight: 600;
-    padding: 0 20px 20px 20px;
+    font-weight: 700;
+    padding: 0 20px 25px 20px;
     margin: 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .menu {
@@ -53,134 +52,122 @@ body {
 }
 
 .menu li a {
-    display: block;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 14px 20px;
     color: white;
     text-decoration: none;
-    padding: 15px 20px;
-    transition: background-color 0.3s, transform 0.1s;
-    font-weight: 400;
+    transition: all 0.2s ease-in-out;
+    border-left: 4px solid transparent;
 }
 
 .menu li a:hover,
 .menu li a.active {
-    /* Warna hover disesuaikan agar lebih gelap dari #25805E */
-    background-color: #1a6449;
+    background-color: var(--sidebar-hover);
+    border-left: 4px solid #fff;
+    font-weight: 600;
 }
 
-/* Konten Utama */
+/* CONTENT */
 .content {
-    flex-grow: 1;
+    flex: 1;
     padding: 40px;
 }
 
 .content-header h1 {
-    font-size: 2em;
-    font-weight: 600;
-    color: #333;
-    margin-top: 0;
-    margin-bottom: 5px;
+    font-size: 2.2em;
+    font-weight: 700;
+    margin: 0 0 5px 0;
 }
 
 .content-header p {
     color: #666;
-    margin-bottom: 30px;
+    margin-bottom: 35px;
+    font-size: 1em;
 }
 
-/* Ringkasan Aktivitas (Card) */
+/* SUMMARY CARDS */
 .summary-cards {
     display: flex;
-    gap: 20px;
+    gap: 25px;
     margin-bottom: 40px;
 }
 
 .card {
-    background-color: white;
-    padding: 25px;
-    border-radius: 12px;
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
     box-shadow: var(--card-shadow);
     flex: 1;
-    text-align: left;
-    transition: transform 0.3s;
+    transition: all 0.3s ease;
+    cursor: pointer;
 }
 
 .card:hover {
-    transform: translateY(-3px);
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 0 18px 30px rgba(0,0,0,0.15);
 }
 
-.card h3 {
+.card-title {
     font-size: 1em;
-    font-weight: 400;
-    color: #666;
-    margin-top: 10px;
-    margin-bottom: 0;
+    color: #777;
+    margin-bottom: 10px;
 }
 
-.card .number {
+.card-number {
     font-size: 3em;
     font-weight: 700;
-    /* MENGGUNAKAN WARNA BARU */
     color: var(--sidebar-color);
-    line-height: 1;
-    margin-bottom: 5px;
+    margin-bottom: 6px;
 }
 
-/* Tabel Tugas Akhir Mahasiswa */
+/* TABLE */
 .table-container {
-    background-color: white;
+    background: white;
     padding: 25px;
-    border-radius: 12px;
-    box-shadow: 0 4px 8px rgba(0,0,0,0.05);
-    overflow-x: auto;
+    border-radius: 15px;
+    box-shadow: 0 5px 12px rgba(0,0,0,0.06);
+}
+
+.table-title {
+    font-size: 1.3em;
+    font-weight: 700;
+    margin-bottom: 20px;
 }
 
 .ta-table {
     width: 100%;
     border-collapse: collapse;
+}
+
+.ta-table th,
+.ta-table td {
+    padding: 15px;
+    border-bottom: 1px solid #eee;
     text-align: left;
 }
 
-.ta-table th, .ta-table td {
-    padding: 15px;
-    border-bottom: 1px solid #eee;
-}
-
 .ta-table th {
-    background-color: #f9f9f9;
-    font-weight: 600;
-    color: #444;
-    text-transform: uppercase;
+    background: #f9f9f9;
     font-size: 0.9em;
+    font-weight: 600;
 }
 
 .ta-table tr:hover {
-    background-color: #fafafa;
+    background: #f5f5f5;
 }
 
-/* Badge Status */
+/* BADGE */
 .badge {
-    display: inline-block;
-    padding: 6px 12px;
+    padding: 6px 14px;
     border-radius: 20px;
+    color: white;
     font-size: 0.85em;
     font-weight: 600;
-    color: white;
-    text-align: center;
 }
 
-.badge.diajukan {
-    background-color: #ff9800; /* Orange (tetap) */
-}
-
-.badge.bimbingan {
-    /* Mengubah warna bimbingan menjadi warna yang lebih serasi dengan hijau */
-    background-color: #4CAF50; /* Hijau */
-}
-
-.badge.lulus {
-    background-color: #2E7D32; /* Hijau gelap */
-}
-
-.badge.proses {
-    /* Menggunakan warna aksen yang serasi */
-    background-color: var(--accent-color);
-}
+.badge.disetujui { background: #2E7D32; }
+.badge.revisi     { background: #F57C00; }
+.badge.proses     { background: #388E3C; }
+.badge.tolak      { background: #D32F2F; }

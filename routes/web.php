@@ -49,39 +49,42 @@ Route::middleware(['auth'])->group(function () {
         });
 
     // ===========================
-    // DOSEN AREA
-    // ===========================
-    Route::middleware(['role:dosen'])
-        ->prefix('dosen')
-        ->name('dosen.')
-        ->group(function () {
+// DOSEN AREA
+// ===========================
+Route::middleware(['role:dosen'])
+    ->prefix('dosen')
+    ->name('dosen.')
+    ->group(function () {
 
-            Route::get('/dashboard', [DosenController::class, 'dashboard'])->name('dashboard');
+        Route::get('/dashboard', [DosenController::class, 'dashboard'])->name('dashboard');
 
-            Route::get('/judul/persetujuan', [DosenController::class, 'listPersetujuan'])
-                ->name('judul.persetujuan');
-            Route::post('/judul/{tugasAkhir}/approve', [DosenController::class, 'approveJudul'])
-                ->name('judul.approve');
-            Route::post('/judul/{tugasAkhir}/reject', [DosenController::class, 'rejectJudul'])
-                ->name('judul.reject');
+        // Tambahan agar cocok dengan layout
+        Route::get('/review', [DosenController::class, 'listPersetujuan'])->name('review.index');
 
-            Route::get('/log-bimbingan', [DosenController::class, 'listBimbingan'])
-                ->name('bimbingan.log');
-            Route::post('/log-bimbingan/{bimbingan}/proses', [DosenController::class, 'prosesBimbingan'])
-                ->name('bimbingan.proses');
+        Route::get('/judul/persetujuan', [DosenController::class, 'listPersetujuan'])
+            ->name('judul.persetujuan');
+        Route::post('/judul/{tugasAkhir}/approve', [DosenController::class, 'approveJudul'])
+            ->name('judul.approve');
+        Route::post('/judul/{tugasAkhir}/reject', [DosenController::class, 'rejectJudul'])
+            ->name('judul.reject');
 
-            Route::get('/ta/{tugasAkhir}/grading', [DosenController::class, 'showGradingForm'])
-                ->name('grading.form');
-            Route::post('/ta/{tugasAkhir}/grading', [DosenController::class, 'submitGrading'])
-                ->name('grading.submit');
+        Route::get('/log-bimbingan', [DosenController::class, 'listBimbingan'])
+            ->name('bimbingan.log');
+        Route::post('/log-bimbingan/{bimbingan}/proses', [DosenController::class, 'prosesBimbingan'])
+            ->name('bimbingan.proses');
 
-            Route::get('/mahasiswa-bimbingan', [DosenController::class, 'mahasiswaBimbingan'])
-                ->name('mahasiswa.bimbingan');
-            Route::get('/bimbingan/mahasiswa/{mahasiswa}', [DosenController::class, 'detailBimbingan'])
-                ->name('bimbingan.detail');
-            Route::get('/mahasiswa-bimbingan/{mahasiswa}', [DosenController::class, 'profileMahasiswa'])
-                ->name('mahasiswa.profile');
-        });
+        Route::get('/ta/{tugasAkhir}/grading', [DosenController::class, 'showGradingForm'])
+            ->name('grading.form');
+        Route::post('/ta/{tugasAkhir}/grading', [DosenController::class, 'submitGrading'])
+            ->name('grading.submit');
+
+        Route::get('/mahasiswa-bimbingan', [DosenController::class, 'mahasiswaBimbingan'])
+            ->name('mahasiswa.bimbingan');
+        Route::get('/bimbingan/mahasiswa/{mahasiswa}', [DosenController::class, 'detailBimbingan'])
+            ->name('bimbingan.detail');
+        Route::get('/mahasiswa-bimbingan/{mahasiswa}', [DosenController::class, 'profileMahasiswa'])
+            ->name('mahasiswa.profile');
+    });
 
     // ===========================
     // MAHASISWA AREA

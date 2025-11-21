@@ -4,33 +4,39 @@
 /* === GAYA DASAR & LAYOUT FULL SCREEN === */
 body {
     font-family: 'Montserrat', sans-serif;
-    margin: 0;
+    margin: 0; /* Hapus margin default browser */
     padding: 0;
-    background-color: #f7f9fa;
+    /* Latar belakang luar dashboard tidak terlihat lagi */
+    background-color: #e8f5e8;
     display: flex;
+    /* Pastikan BODY mengisi 100% tinggi viewport */
     min-height: 100vh;
     color: #333;
 }
 
-/* CONTAINER UTAMA (Harus ada di layout utama) */
+/* CONTAINER UTAMA (Memenuhi seluruh layar) */
 .dashboard-container {
     display: flex;
     flex-grow: 1;
+    /* Hapus margin 20px agar tidak ada space di sekitar dashboard */
     margin: 0;
+    /* Hapus border-radius agar memenuhi sudut layar */
     border-radius: 0;
     overflow: hidden;
     background: #ffffff;
+    /* Hapus bayangan agar tampilan lebih flat dan seamless */
     box-shadow: none;
 }
 
-/* 🟢 SIDEBAR NAVIGASI (#25805E) - (Harus ada di layout utama) */
+/* 🟢 SIDEBAR NAVIGASI (Menggunakan #25805E) */
 .sidebar {
     width: 250px;
     background: #25805E;
     color: white;
-    padding: 0; /* Padding diatur di h2 dan li a */
+    padding: 24px 0;
+    /* Pastikan sidebar mengisi 100% tinggi container */
     min-height: 100vh;
-    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.1); /* Tambahkan bayangan ke kanan sidebar */
     position: sticky;
     top: 0;
 }
@@ -38,7 +44,7 @@ body {
 .sidebar h2 {
     font-size: 1.6em;
     font-weight: 700;
-    padding: 24px 24px 20px;
+    padding: 0 24px 20px;
     margin: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.2);
 }
@@ -70,15 +76,16 @@ body {
     font-weight: 600;
 }
 
-/* 📄 KONTEN UTAMA ADMIN */
+/* --- KONTEN UTAMA & KOMPONEN LAINNYA --- */
+
 .main-content {
     flex-grow: 1;
     background-color: white;
-    padding: 40px;
+    padding: 30px 40px;
 }
 
 .content-header h1 {
-    font-size: 2em;
+    font-size: 1.8em;
     font-weight: 700;
     color: #222;
     margin-top: 0;
@@ -88,63 +95,61 @@ body {
 .content-header p {
     color: #666;
     margin-bottom: 30px;
-    font-size: 1em;
+    font-size: 0.9em;
 }
 
-/* 📊 RINGKASAN AKTIVITAS (CARDS) */
 .summary-cards {
     display: flex;
-    gap: 25px;
+    gap: 20px;
     margin-bottom: 40px;
 }
 
 .card {
     flex: 1;
     background: #ffffff;
-    padding: 25px;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
-    transition: transform 0.2s, box-shadow 0.2s;
-    text-align: center; /* Admin cards rata tengah */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+    transition: transform 0.2s;
+    text-align: center;
 }
 
 .card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .card-title {
-    font-size: 1em;
-    font-weight: 600;
-    color: #555;
+    font-size: 0.9em;
+    font-weight: 500;
+    color: #777;
     margin-bottom: 5px;
 }
 
 .card-number {
-    font-size: 3em;
-    font-weight: 800;
-    color: #25805E; /* Warna utama untuk angka */
+    font-size: 2.5em;
+    font-weight: 700;
+    color: #25805E;
     margin-bottom: 5px;
 }
 
 .card-desc {
-    font-size: 0.9em;
-    color: #888;
+    font-size: 0.8em;
+    color: #999;
 }
 
-/* 📋 TABEL DATA */
 .table-box {
     background: #ffffff;
-    border-radius: 10px;
+    border-radius: 8px; /* Menggunakan 8px agar seragam dengan card */
     padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.05);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05); /* Menggunakan bayangan yang lebih tipis */
 }
 
-.table-box h3 {
+.table-header h3 {
     font-size: 1.2em;
-    font-weight: 700;
+    font-weight: 600;
     color: #444;
-    margin-bottom: 20px;
+    margin-bottom: 15px;
     margin-top: 0;
 }
 
@@ -155,72 +160,41 @@ body {
     text-align: left;
 }
 
-.ta-table thead th {
+.ta-table th {
     font-weight: 600;
-    color: #777;
+    color: #555;
     padding: 12px 0;
     border-bottom: 2px solid #f0f0f0;
 }
 
-.ta-table tbody td {
+.ta-table td {
     padding: 12px 0;
     border-bottom: 1px solid #eee;
     color: #444;
 }
 
-.ta-table tbody tr:hover {
+.ta-table tr:hover {
     background-color: #fafafa;
 }
 
-/* === 🏷️ STATUS PILL ADMIN === */
 .status-pill {
-    padding: 6px 12px;
-    font-size: 0.85em;
+    padding: 6px 14px;
+    font-size: 0.8em;
     border-radius: 999px;
     font-weight: 600;
     display: inline-block;
     text-align: center;
 }
 
-/* Status Disetujui/Diterima (Hijau) */
-.status-green {
-    background: #e8f5e9;
-    color: #43a047;
-}
-/* Status Sedang Diproses (Biru) */
 .status-blue {
     background: #e1f5fe;
     color: #03a9f4;
 }
-/* Status Ditolak (Merah) */
+.status-green {
+    background: #e8f5e9;
+    color: #43a047;
+}
 .status-red {
     background: #ffebee;
     color: #e53935;
-}
-
-/* Opsional: Style untuk tooltip (jika data-tooltip digunakan) */
-[data-tooltip] {
-    position: relative;
-    cursor: default;
-}
-
-[data-tooltip]:after {
-    content: attr(data-tooltip);
-    position: absolute;
-    top: -30px;
-    left: 50%;
-    transform: translateX(-50%);
-    background: #333;
-    color: white;
-    padding: 4px 8px;
-    border-radius: 4px;
-    font-size: 0.8em;
-    white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: opacity 0.2s;
-}
-
-[data-tooltip]:hover:after {
-    opacity: 1;
 }
