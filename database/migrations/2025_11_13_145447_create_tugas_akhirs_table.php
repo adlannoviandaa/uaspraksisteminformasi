@@ -8,7 +8,7 @@ return new class extends Migration
 {
     public function up(): void
     {
-        Schema::create('tugas_akhirs', function (Blueprint $table) {
+        Schema::create('tugas_akhir', function (Blueprint $table) {
             $table->id();
 
             // Relasi ke tabel users (mahasiswa pengaju)
@@ -37,6 +37,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        Schema::dropIfExists('tugas_akhirs');
+        Schema::dropIfExists('tugas_akhir');
     }
 };

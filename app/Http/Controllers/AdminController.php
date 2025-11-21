@@ -9,38 +9,25 @@ use App\Models\Pesan;
 
 class AdminController extends Controller
 {
-    /**
-     * DASHBOARD ADMIN
-     */
+    // ===========================
+    // DASHBOARD
+    // ===========================
     public function dashboard()
     {
-        // Hitung jumlah mahasiswa
         $totalMahasiswa = User::where('role', 'mahasiswa')->count();
-
-        // Hitung total tugas akhir
         $totalTA = TugasAkhir::count();
-
-        // Hitung total pesan
         $totalPesan = Pesan::count();
 
-        // Ambil semua pengajuan TA
-        $pengajuan = TugasAkhir::with([
-            'mahasiswa',
-            'dosenPembimbing1',
-            'dosenPembimbing2'
-        ])->get();
+        $pengajuan = TugasAkhir::with(['mahasiswa', 'dosenPembimbing1', 'dosenPembimbing2'])->get();
 
-        return view('admin.dashboard', [
-            'totalMahasiswa' => $totalMahasiswa,
-            'totalTA'        => $totalTA,
-            'totalPesan'     => $totalPesan,
-            'pengajuan'      => $pengajuan
-        ]);
+        return view('admin.dashboard', compact(
+            'totalMahasiswa', 'totalTA', 'totalPesan', 'pengajuan'
+        ));
     }
 
-    /**
-     * CRUD USER
-     */
+    // ===========================
+    // CRUD USER
+    // ===========================
     public function indexUsers()
     {
         $users = User::all();
@@ -115,55 +102,71 @@ class AdminController extends Controller
             ->with('success', 'Pengguna berhasil dihapus.');
     }
 
-    /**
-     * LAPORAN TUGAS AKHIR
-     */
-    public function laporanTugasAkhir()
+    // ===========================
+    // TUGAS AKHIR
+    // ===========================
+    public function tugasAkhirIndex()
     {
-        $tugasAkhirList = TugasAkhir::with([
-            'mahasiswa',
-            'dosenPembimbing1',
-            'dosenPembimbing2'
-        ])->orderBy('created_at', 'desc')->get();
+        $tugasAkhirList = TugasAkhir::with(['mahasiswa', 'dosenPembimbing1', 'dosenPembimbing2'])
+            ->orderBy('created_at', 'desc')
+            ->get();
 
-        return view('admin.laporan_ta', compact('tugasAkhirList'));
+        return view('admin.tugasakhir.index', compact('tugasAkhirList'));
     }
 
-    /**
-     * FORM PENETAPAN PEMBIMBING 2
-     */
+    public function tugasAkhirShow(TugasAkhir $tugasAkhir)
+    {
+        return view('admin.tugasakhir.show', compact('tugasAkhir'));
+    }
+
+    public function updateStatus(Request $request, TugasAkhir $tugasAkhir)
+    {
+        $request->validate([
+            'status' => 'required|in:Pending,Diterima,Ditolak',
+        ]);
+
+        $tugasAkhir->update(['status' => $request->status]);
+
+        return redirect()->route('admin.tugasakhir.index')
+            ->with('success', 'Status berhasil diperbarui.');
+    }
+
+    // ===========================
+    // SET PEMBIMBING 2
+    // ===========================
     public function showSetDosenForm(TugasAkhir $tugasAkhir)
     {
         if ($tugasAkhir->status !== 'Diterima') {
-            return back()->with('error', 'Pembimbing 2 hanya dapat ditetapkan jika status TA = Diterima.');
+            return back()->with('error', 'Pembimbing 2 hanya dapat ditetapkan jika TA sudah Diterima.');
         }
 
-        $dosenList = User::where('role', 'dosen')->orderBy('name')->get();
+        $dosenList = User::where('role', 'dosen')->get();
 
-        return view('admin.set_dosen_form', compact('tugasAkhir', 'dosenList'));
+        return view('admin.tugasakhir.set_dosen', compact('tugasAkhir', 'dosenList'));
     }
 
-    /**
-     * PROSES PENETAPAN PEMBIMBING 2
-     */
     public function submitSetDosen(Request $request, TugasAkhir $tugasAkhir)
     {
         $request->validate([
             'dosen_pembimbing2_id' => 'nullable|exists:users,id',
         ]);
 
-        if (
-            $request->dosen_pembimbing2_id &&
-            $request->dosen_pembimbing2_id == $tugasAkhir->pembimbing1_id
-        ) {
-            return back()->with('error', 'Pembimbing 2 tidak boleh sama dengan Pembimbing 1.');
-        }
-
         $tugasAkhir->update([
-            'pembimbing2_id' => $request->dosen_pembimbing2_id ?? null,
+            'dosen_pembimbing2_id' => $request->dosen_pembimbing2_id
         ]);
 
-        return redirect()->route('admin.laporan.ta')
-            ->with('success', 'Pembimbing 2 berhasil diperbarui.');
+        return redirect()->route('admin.tugasakhir.index')
+            ->with('success', 'Pembimbing 2 berhasil ditetapkan.');
+    }
+
+    // ===========================
+    // DELETE TUGAS AKHIR
+    // ===========================
+    public function destroyTugasAkhir(TugasAkhir $tugasAkhir)
+    {
+        $tugasAkhir->delete();
+
+        return redirect()->route('admin.tugasakhir.index')
+            ->with('success', 'Data TA berhasil dihapus.');
     }
 }

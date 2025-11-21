@@ -7,6 +7,11 @@ use App\Http\Controllers\MahasiswaController;
 use App\Http\Controllers\DosenController;
 use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Auth\ForgotPasswordController;
+use App\Http\Controllers\TugasAkhirController;
+use App\Http\Controllers\PesanController;
+use App\Http\Controllers\PengaturanController;
+
+
 
 // =======================================
 // AUTH
@@ -46,6 +51,61 @@ Route::middleware(['auth'])->group(function () {
 
             Route::get('/settings', [AdminController::class, 'settings'])->name('settings');
             Route::post('/settings', [AdminController::class, 'updateSettings'])->name('settings.update');
+
+            // ===========================
+// TUGAS AKHIR (ADMIN)
+// ===========================
+
+// List semua TA
+Route::get('/tugas-akhir', [AdminController::class, 'tugasAkhirIndex'])
+    ->name('tugasakhir.index');
+
+// Detail TA
+Route::get('/tugas-akhir/{tugasAkhir}', [AdminController::class, 'tugasAkhirDetail'])
+    ->name('tugasakhir.detail');
+
+// Update Status TA
+Route::get('/tugas-akhir/{tugasAkhir}/status', [AdminController::class, 'tugasAkhirStatusForm'])
+    ->name('tugasakhir.status.form');
+Route::post('/tugas-akhir/{tugasAkhir}/status', [AdminController::class, 'tugasAkhirStatusUpdate'])
+    ->name('tugasakhir.status.update');
+
+// Set Dosen Pembimbing
+Route::get('/tugas-akhir/{tugasAkhir}/set-dosen', [AdminController::class, 'setDosenForm'])
+    ->name('tugasakhir.setdosen.form');
+Route::post('/tugas-akhir/{tugasAkhir}/set-dosen', [AdminController::class, 'setDosenSubmit'])
+    ->name('tugasakhir.setdosen.submit');
+
+// Hapus TA
+Route::get('/tugas-akhir/{tugasAkhir}/hapus', [AdminController::class, 'tugasAkhirDestroyView'])
+    ->name('tugasakhir.destroy.view');
+Route::delete('/tugas-akhir/{tugasAkhir}/hapus', [AdminController::class, 'tugasAkhirDestroy'])
+    ->name('tugasakhir.destroy');
+
+    // ===========================
+// PESAN (ADMIN)
+// ===========================
+Route::prefix('pesan')
+    ->name('pesan.')
+    ->group(function () {
+        Route::get('/', [PesanController::class, 'index'])->name('index');
+        Route::get('/detail/{id}', [PesanController::class, 'show'])->name('show');
+        Route::post('/detail/{id}/reply', [PesanController::class, 'reply'])->name('reply');
+
+
+Route::get('/admin/pesan', [PesanController::class, 'index'])->name('admin.pesan.index');
+
+// Menyimpan pesan baru (jika form kirim pesan dari user/admin)
+Route::post('/admin/pesan', [PesanController::class, 'store'])->name('admin.pesan.store');
+
+// Update pesan → misalnya ubah status ke "awaiting_reply"
+Route::post('/admin/pesan/{id}/reply', [PesanController::class, 'reply'])->name('admin.pesan.reply');
+    });
+
+
+
+    
+
         });
 
     // ===========================
@@ -120,6 +180,9 @@ Route::middleware(['role:dosen'])
             Route::post('/update', [AuthLoginController::class, 'updateProfile'])->name('update');
             Route::get('/settings', [AuthLoginController::class, 'settings'])->name('settings');
             Route::post('/settings', [AuthLoginController::class, 'updateSettings'])->name('settings.update');
+            
+
+            
         });
 
     // ===========================
@@ -151,3 +214,22 @@ Route::middleware(['role:dosen'])
 // =======================================
 Route::view('/about', 'about')->name('about');
 Route::view('/contact', 'contact')->name('contact');
+
+// ===========================
+// PESAN (USER)
+// ===========================
+Route::prefix('pesan')
+    ->name('pesan.')
+    ->group(function () {
+        Route::get('/', [PesanController::class, 'index'])->name('index');
+        Route::get('/kirim', [PesanController::class, 'create'])->name('create');
+        Route::post('/kirim', [PesanController::class, 'store'])->name('store');
+        Route::get('/detail/{id}', [PesanController::class, 'show'])->name('show');
+    });
+
+
+Route::get('/admin/pengaturan', [PengaturanController::class, 'index'])
+    ->name('pengaturan.index');
+
+Route::post('/admin/pengaturan', [PengaturanController::class, 'update'])
+    ->name('pengaturan.update');
